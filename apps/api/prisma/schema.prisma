@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+enum ArticleStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model User {
+  id           String    @id @default(cuid())
+  handle       String    @unique @db.VarChar(24)
+  email        String    @unique @db.VarChar(254)
+  passwordHash String
+  role         Role      @default(USER)
+  createdAt    DateTime  @default(now())
+  articles     Article[]
+  comments     Comment[]
+  bookmarks    Bookmark[]
+  sessions     Session[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  previousTokenHash String?
+  rotatedAt DateTime?
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  revokedAt DateTime?
+  @@index([userId, revokedAt])
+}
+
+model Article {
+  id          String        @id @default(cuid())
+  slug        String        @unique @db.VarChar(170)
+  title       String        @db.VarChar(140)
+  summary     String        @db.VarChar(300)
+  body        String        @db.Text
+  status      ArticleStatus @default(DRAFT)
+  version     Int           @default(1)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  publishedAt DateTime?
+  authorId    String
+  author      User          @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  tags        ArticleTag[]
+  comments    Comment[]
+  bookmarks   Bookmark[]
+  @@index([status, publishedAt(sort: Desc)])
+  @@index([authorId, status])
+}
+
+model Tag {
+  id       String       @id @default(cuid())
+  name     String       @unique @db.VarChar(32)
+  articles ArticleTag[]
+}
+
+model ArticleTag {
+  articleId String
+  tagId     String
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  @@id([articleId, tagId])
+  @@index([tagId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  articleId String
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  body      String   @db.VarChar(2000)
+  createdAt DateTime @default(now())
+  deletedAt DateTime?
+  @@index([articleId, createdAt])
+}
+
+model Bookmark {
+  userId    String
+  articleId String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  @@id([userId, articleId])
+  @@index([articleId])
+}
