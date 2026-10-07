@@ -1,0 +1,6 @@
+pnpm-lock.yaml
+package-lock.baseline.json
+apps/web/dist
+apps/api/dist
+packages/contracts/dist
+apps/api/src/generated

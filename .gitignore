@@ -11,3 +11,12 @@ dist/
 # Logs / OS
 *.log
 .DS_Store
+
+# Local configuration and test output
+.env
+.env.*
+!.env.example
+test-results/
+playwright-report/
+coverage/
+apps/api/prisma/*.db

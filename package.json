@@ -1,24 +1,46 @@
 {
-  "name": "crossroad-frontend",
+  "name": "crossroad",
   "private": true,
-  "version": "2.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc --noEmit && vite build",
-    "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+  "version": "3.0.0",
+  "packageManager": "pnpm@10.34.4",
+  "engines": {
+    "node": ">=22.12"
   },
-  "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+  "scripts": {
+    "dev": "pnpm --filter @crossroad/web dev",
+    "dev:api": "node scripts/run-with-env.mjs --filter @crossroad/api dev",
+    "build": "pnpm --filter @crossroad/contracts build && pnpm --filter @crossroad/api build && VITE_DATA_MODE=api pnpm --filter @crossroad/web build",
+    "build:demo": "pnpm --filter @crossroad/contracts build && pnpm --filter @crossroad/web build:demo",
+    "typecheck": "pnpm --filter @crossroad/contracts typecheck && pnpm --filter @crossroad/api typecheck && pnpm --filter @crossroad/web typecheck",
+    "test": "pnpm --filter @crossroad/contracts test && pnpm --filter @crossroad/api test && pnpm --filter @crossroad/web test",
+    "lint": "eslint .",
+    "format:check": "prettier --check .",
+    "db:generate": "pnpm --filter @crossroad/api db:generate",
+    "db:migrate": "node scripts/run-with-env.mjs --filter @crossroad/api db:migrate",
+    "test:integration": "pnpm build && node scripts/integration.mjs",
+    "test:e2e": "pnpm build:demo && playwright test",
+    "test:fullstack": "pnpm build && RUN_BROWSER=1 node scripts/integration.mjs",
+    "check:budget": "node scripts/check-bundle.mjs",
+    "dev:api-web": "node scripts/run-with-env.mjs --filter @crossroad/web dev",
+    "start:api": "node scripts/run-with-env.mjs --filter @crossroad/api start",
+    "db:deploy": "node scripts/run-with-env.mjs --filter @crossroad/api db:deploy"
   },
   "devDependencies": {
-    "@types/node": "^22.13.5",
-    "@types/react": "^18.3.15",
-    "@types/react-dom": "^18.3.1",
-    "@vitejs/plugin-react": "^4.3.2",
-    "typescript": "^5.7.2",
-    "vite": "^5.4.10"
+    "@eslint/js": "^9.0.0",
+    "@playwright/test": "1.61.1",
+    "embedded-postgres": "18.4.0-beta.17",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^10.0.0",
+    "prettier": "^3.0.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^4.1.11"
+  },
+  "pnpm": {
+    "overrides": {
+      "tinypool": "2.1.2",
+      "deepmerge-ts": "8.0.0",
+      "vite": "6.4.3",
+      "js-yaml": "5.4.1"
+    }
   }
 }
