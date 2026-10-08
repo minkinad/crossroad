@@ -11,7 +11,7 @@
     "dev:api": "node scripts/run-with-env.mjs --filter @crossroad/api dev",
     "build": "pnpm --filter @crossroad/contracts build && pnpm --filter @crossroad/api build && VITE_DATA_MODE=api pnpm --filter @crossroad/web build",
     "build:demo": "pnpm --filter @crossroad/contracts build && pnpm --filter @crossroad/web build:demo",
-    "typecheck": "pnpm --filter @crossroad/contracts typecheck && pnpm --filter @crossroad/api typecheck && pnpm --filter @crossroad/web typecheck",
+    "typecheck": "pnpm --filter @crossroad/contracts build && pnpm --filter @crossroad/api typecheck && pnpm --filter @crossroad/web typecheck",
     "test": "pnpm --filter @crossroad/contracts test && pnpm --filter @crossroad/api test && pnpm --filter @crossroad/web test",
     "lint": "eslint .",
     "format:check": "prettier --check .",
