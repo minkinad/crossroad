@@ -4,7 +4,14 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { commentInput } from "@crossroad/contracts";
 import { repository } from "../lib";
 import { useSession } from "../session";
-import { ErrorState, Loading, Status, formatDate, message } from "../ui";
+import {
+  ErrorState,
+  Loading,
+  Status,
+  countLabel,
+  formatDate,
+  message,
+} from "../ui";
 
 export function ArticlePage() {
   const { slug = "" } = useParams();
@@ -140,7 +147,14 @@ export function ArticlePage() {
                 <p className="eyebrow">Продолжите мысль</p>
                 <h2 id="discussion-title">Обсуждение</h2>
               </div>
-              <span>{comments.data?.length ?? 0} комментариев</span>
+              <span>
+                {countLabel(
+                  comments.data?.length ?? 0,
+                  "комментарий",
+                  "комментария",
+                  "комментариев",
+                )}
+              </span>
             </div>
             {comments.isPending ? (
               <Loading />
@@ -203,7 +217,19 @@ export function ArticlePage() {
           <p className="eyebrow">Об этой истории</p>
           <p>{value.summary}</p>
           <span>
-            {value.commentCount} комментариев · {value.bookmarkCount} закладок
+            {countLabel(
+              value.commentCount,
+              "комментарий",
+              "комментария",
+              "комментариев",
+            )}{" "}
+            ·{" "}
+            {countLabel(
+              value.bookmarkCount,
+              "закладка",
+              "закладки",
+              "закладок",
+            )}
           </span>
           <Link to="/">← Все истории</Link>
         </aside>

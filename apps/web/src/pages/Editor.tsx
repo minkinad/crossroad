@@ -117,38 +117,74 @@ export function Editor() {
           <p className="eyebrow">Ваша история начинается здесь</p>
           <h1>Создать публикацию</h1>
           <div className="editor-fields">
-            <label htmlFor="editor-title">Заголовок</label>
+            <div className="field-heading">
+              <label htmlFor="editor-title">Заголовок</label>
+              <span>{title.length} / 140</span>
+            </div>
             <input
               id="editor-title"
               className="title-input"
               value={title}
-              onChange={(event) => setTitle(event.target.value)}
+              onChange={(event) => {
+                setTitle(event.target.value);
+                setError("");
+              }}
               maxLength={140}
+              aria-describedby="editor-title-hint"
               placeholder="О чём вы хотите рассказать?"
             />
-            <label htmlFor="editor-summary">Краткое описание</label>
+            <p className="field-hint" id="editor-title-hint">
+              Короткий и конкретный заголовок легче заметить в ленте.
+            </p>
+            <div className="field-heading">
+              <label htmlFor="editor-summary">Краткое описание</label>
+              <span>{summary.length} / 300</span>
+            </div>
             <textarea
               id="editor-summary"
               rows={2}
               value={summary}
-              onChange={(event) => setSummary(event.target.value)}
+              onChange={(event) => {
+                setSummary(event.target.value);
+                setError("");
+              }}
               maxLength={300}
+              aria-describedby="editor-summary-hint"
               placeholder="Суть вашей истории в двух предложениях"
             />
-            <label htmlFor="editor-body">Текст</label>
+            <p className="field-hint" id="editor-summary-hint">
+              Это описание читатели увидят до открытия статьи.
+            </p>
+            <div className="field-heading">
+              <label htmlFor="editor-body">Текст</label>
+              <span>{body.length} / 40 000</span>
+            </div>
             <textarea
               id="editor-body"
               rows={16}
               value={body}
-              onChange={(event) => setBody(event.target.value)}
+              onChange={(event) => {
+                setBody(event.target.value);
+                setError("");
+              }}
               maxLength={40000}
+              aria-describedby="editor-body-hint"
               placeholder="Начните с самой важной мысли…"
             />
-            <label htmlFor="editor-tags">Теги через запятую</label>
+            <p className="field-hint" id="editor-body-hint">
+              Разделяйте абзацы пустой строкой — так текст будет легче читать.
+            </p>
+            <div className="field-heading">
+              <label htmlFor="editor-tags">Теги через запятую</label>
+              <span>До 5 тегов</span>
+            </div>
             <input
               id="editor-tags"
               value={tags}
-              onChange={(event) => setTags(event.target.value)}
+              onChange={(event) => {
+                setTags(event.target.value);
+                setError("");
+              }}
               placeholder="design, product"
             />
           </div>
