@@ -10,6 +10,24 @@ const date = new Intl.DateTimeFormat("ru-RU", {
 export function formatDate(value: string | null) {
   return value ? date.format(new Date(value)) : "Черновик";
 }
+export function countLabel(
+  count: number,
+  one: string,
+  few: string,
+  many: string,
+) {
+  const lastTwo = count % 100;
+  const last = count % 10;
+  const noun =
+    lastTwo >= 11 && lastTwo <= 14
+      ? many
+      : last === 1
+        ? one
+        : last >= 2 && last <= 4
+          ? few
+          : many;
+  return `${count} ${noun}`;
+}
 export function message(error: unknown) {
   return error instanceof Error
     ? error.message
@@ -86,6 +104,7 @@ export function ArticleCard({
     <article
       className={featured ? "article-card featured-card" : "article-card"}
     >
+      {featured && <span className="featured-label">✳ В центре внимания</span>}
       <div className="article-overline">
         <span>{article.tags[0] ? `#${article.tags[0]}` : "Статья"}</span>
         <span>{formatDate(article.publishedAt)}</span>
@@ -102,6 +121,9 @@ export function ArticleCard({
         <span className="dot">·</span>
         <span>{Math.max(1, Math.ceil(article.body.length / 1000))} мин</span>
       </div>
+      <span className="card-arrow" aria-hidden="true">
+        ↗
+      </span>
     </article>
   );
 }

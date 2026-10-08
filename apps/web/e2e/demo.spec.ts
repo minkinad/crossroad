@@ -28,7 +28,10 @@ test("demo reader becomes a local author and saves an article", async ({
   await page.getByRole("button", { name: "Отправить комментарий" }).click();
   await expect(page.getByText("Полезная мысль о ясности.")).toBeVisible();
   await page.getByRole("button", { name: /Сохранить/ }).click();
-  await page.getByRole("link", { name: "Закладки" }).click();
+  await page
+    .getByRole("navigation", { name: "Главное меню" })
+    .getByRole("link", { name: "Закладки" })
+    .click();
   await expect(
     page.getByRole("link", { name: "Почему мы пишем о системах" }),
   ).toBeVisible();
@@ -60,4 +63,36 @@ test("demo does not imply real accounts and keeps keyboard navigation", async ({
   await page.screenshot({ path: "docs/images/mobile.png", fullPage: true });
   await page.keyboard.press("Tab");
   await expect(page.getByRole("link", { name: "К содержимому" })).toBeFocused();
+});
+
+test("small screens fit and theme preference survives navigation", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.goto("/");
+  await expect(
+    page.getByRole("heading", { name: "Главные истории" }),
+  ).toBeVisible();
+  const fitsViewport = () =>
+    page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    );
+  expect(await fitsViewport()).toBe(true);
+
+  await page.getByRole("button", { name: "Тёмная тема" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page
+    .getByRole("link", { name: "Дизайн-система для маленькой команды" })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Дизайн-система для маленькой команды" }),
+  ).toBeVisible();
+  expect(await fitsViewport()).toBe(true);
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+
+  await page.goto("/write/new");
+  await expect(
+    page.getByRole("heading", { name: "Создать публикацию" }),
+  ).toBeVisible();
+  expect(await fitsViewport()).toBe(true);
 });

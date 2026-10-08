@@ -41,10 +41,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
         <div className="header-inner">
           <Link to="/" className="brand">
             <span className="brand-mark" aria-hidden="true">
-              ×
+              ✳
             </span>
-            <span>CrossRoad</span>
+            <span>
+              Cross<span className="brand-accent">Road</span>
+            </span>
           </Link>
+          <span className="header-note">Пространство для новых идей</span>
           <nav className="main-nav" aria-label="Главное меню">
             <NavLink to="/" end>
               Лента
@@ -69,17 +72,32 @@ export function Shell({ children }: { children: React.ReactNode }) {
       </header>
       {repository.mode === "demo" && (
         <div className="demo-banner" role="note">
-          Демо-режим · изменения сохраняются только в этом браузере. Учётных
-          записей здесь нет.
+          <span className="demo-badge">Демо-режим</span>
+          <span>
+            Ваши истории и закладки сохраняются только в этом браузере.
+          </span>
         </div>
       )}
       <main id="main">{children}</main>
       <footer className="site-footer">
-        <span>CrossRoad · Write. Discover. Discuss. Connect.</span>
-        <span>
-          <Link to="/data">Мои локальные данные</Link> · Код: MIT · Контент: CC
-          BY-NC-SA 4.0
-        </span>
+        <div className="footer-inner">
+          <div>
+            <Link to="/" className="footer-brand">
+              CrossRoad<span>✳</span>
+            </Link>
+            <p>Место, где одна мысль становится началом разговора.</p>
+          </div>
+          <div className="footer-links">
+            <Link to="/">Читать</Link>
+            <Link to="/write">Писать</Link>
+            <Link to="/bookmarks">Закладки</Link>
+            <Link to="/data">Мои данные</Link>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <span>© CrossRoad · Для любопытных и неравнодушных</span>
+          <span>Код: MIT · Контент: CC BY-NC-SA 4.0</span>
+        </div>
       </footer>
     </div>
   );

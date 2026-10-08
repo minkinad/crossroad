@@ -36,37 +36,110 @@ export function Home() {
   return (
     <div className="page-wrap home-page">
       <section className="masthead">
-        <div>
-          <p className="eyebrow">Место встречи идей</p>
+        <div className="masthead-copy">
+          <p className="eyebrow hero-eyebrow">
+            <span aria-hidden="true">✳</span> Место встречи идей
+          </p>
           <h1>
-            Истории, у которых
+            Идеи начинаются
             <br />
-            <em>есть продолжение.</em>
+            <em>с разговора.</em>
           </h1>
           <p>
-            Пишите о том, что исследуете. Находите интересные мысли. Обсуждайте
-            по существу.
+            Читайте истории людей, которым есть что сказать. Делитесь своими
+            открытиями и находите тех, кто мыслит в том же направлении.
           </p>
-          <Link to="/write" className="button">
-            Начать писать <span aria-hidden="true">↗</span>
-          </Link>
+          <div className="hero-actions">
+            <a href="#stories" className="button hero-read">
+              Читать истории <span aria-hidden="true">↘</span>
+            </a>
+            <Link to="/write" className="hero-write">
+              Начать писать <span aria-hidden="true">↗</span>
+            </Link>
+          </div>
+          <div className="hero-footnote">
+            <span aria-hidden="true">↗</span> Точка пересечения разных взглядов
+          </div>
         </div>
         <div className="masthead-art" aria-hidden="true">
+          <span className="art-kicker">CROSSROAD / ИДЕИ В ДВИЖЕНИИ</span>
           <span className="art-orbit orbit-one" />
           <span className="art-orbit orbit-two" />
           <span className="art-center">
             C<span>×</span>R
           </span>
+          <span className="art-stamp">
+            Открыто
+            <br />
+            для всех <b>↗</b>
+          </span>
+          <span className="art-index">01 — ∞</span>
         </div>
       </section>
+      <div className="discovery-panel" id="stories">
+        <div className="discovery-intro">
+          <span className="eyebrow">Найти своё</span>
+          <strong>Какую историю ищем?</strong>
+        </div>
+        <form className="search-form" onSubmit={onSearch} role="search">
+          <label htmlFor="site-search">Поиск по CrossRoad</label>
+          <div className="search-control">
+            <span className="search-icon" aria-hidden="true">
+              ⌕
+            </span>
+            <input
+              id="site-search"
+              type="search"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Тема, автор, ключевое слово…"
+            />
+            <button type="submit">
+              Искать <span aria-hidden="true">↗</span>
+            </button>
+          </div>
+        </form>
+        <div className="topic-filter" aria-label="Популярные темы">
+          <span>Популярное:</span>
+          {["product", "architecture", "design", "frontend", "mvp"].map(
+            (tag) => (
+              <button
+                type="button"
+                key={tag}
+                aria-pressed={q === tag}
+                onClick={() => {
+                  setSearch(tag);
+                  setParams({ q: tag });
+                }}
+              >
+                #{tag}
+              </button>
+            ),
+          )}
+          {q && (
+            <button
+              type="button"
+              className="clear-filter"
+              onClick={() => {
+                setSearch("");
+                setParams({});
+              }}
+            >
+              Сбросить ×
+            </button>
+          )}
+        </div>
+      </div>
       <div className="content-grid">
         <div className="content-main">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">Читайте и обсуждайте</p>
+              <p className="eyebrow">Лента / Свежие голоса</p>
               <h2>{q ? `Результаты поиска` : "Главные истории"}</h2>
             </div>
-            <span className="section-index">01 / Лента</span>
+            <span className="section-index">
+              Выбирайте, читайте, обсуждайте ↗
+            </span>
           </div>
           {q && (
             <p className="search-caption">
@@ -113,35 +186,28 @@ export function Home() {
           )}
         </div>
         <aside className="sidebar">
-          <form className="search-form" onSubmit={onSearch} role="search">
-            <label htmlFor="site-search">Поиск по CrossRoad</label>
-            <div>
-              <input
-                id="site-search"
-                value={search}
-                onChange={(event) => setSearch(event.target.value)}
-                placeholder="Тема, автор, тег…"
-              />
-              <button type="submit" aria-label="Искать">
-                ↗
-              </button>
-            </div>
-          </form>
-          <div className="side-section">
-            <p className="eyebrow">Темы для исследования</p>
-            <div className="tag-cloud">
-              {["product", "architecture", "design", "frontend", "mvp"].map(
-                (tag) => (
-                  <button key={tag} onClick={() => setParams({ q: tag })}>
-                    #{tag}
-                  </button>
-                ),
-              )}
-            </div>
+          <div className="side-section side-about">
+            <span className="side-asterisk" aria-hidden="true">
+              ✳
+            </span>
+            <p className="eyebrow">Про CrossRoad</p>
+            <h3>
+              Разные взгляды.
+              <br />
+              Общая точка.
+            </h3>
+            <p>
+              Здесь можно читать вдумчиво, писать свободно и продолжать разговор
+              в комментариях.
+            </p>
+            <Link to="/write">
+              Поделитесь своей мыслью <span aria-hidden="true">↗</span>
+            </Link>
           </div>
           <div className="side-quote">
             <span aria-hidden="true">“</span>
             <p>Хорошая идея становится лучше, когда её можно обсудить.</p>
+            <small>— ПРИНЦИП CROSSROAD</small>
           </div>
         </aside>
       </div>
