@@ -396,7 +396,10 @@ try {
     await page.getByText("A browser backed comment").waitFor();
     await page.getByRole("button", { name: /Сохранить/ }).click();
     await page.getByRole("button", { name: /В закладках/ }).waitFor();
-    await page.getByRole("link", { name: "Закладки" }).click();
+    await page
+      .getByRole("navigation", { name: "Главное меню" })
+      .getByRole("link", { name: "Закладки" })
+      .click();
     await page.getByRole("link", { name: "A browser backed story" }).waitFor();
     await page.reload();
     await page.getByRole("link", { name: "A browser backed story" }).waitFor();
