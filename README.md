@@ -1,61 +1,85 @@
 # CrossRoad
 
-[![Deploy CrossRoad to GitHub Pages](https://github.com/MinAleDm/CrossRoad/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/MinAleDm/CrossRoad/actions/workflows/deploy-pages.yml)
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-online-1f8f4f?logo=github)](https://minaledm.github.io/CrossRoad/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-1f8f4f.svg)](LICENSE)
+**Write. Discover. Discuss. Connect.** CrossRoad is an open-source space for publishing articles and discussing ideas. This repository now contains a working first fullstack slice and a separate static demo. It is an active rebuild, not a complete community platform.
 
-`CrossRoad` - учебный проект платформы для статей и дискуссий в формате чистого frontend-прототипа.
+![CrossRoad desktop demo](docs/images/home.png)
 
-## Что сделано
+[Mobile screenshot](docs/images/mobile.png)
 
-- Полностью удален legacy/неиспользуемый код
-- Оставлен только актуальный стек: `React + TypeScript + Vite`
-- Упрощена и выровнена структура репозитория
-- Сохранен автодеплой на GitHub Pages
+## What works now
 
-## Структура проекта
+- Read published articles, search their text, authors and tags, comment, and save bookmarks.
+- Register and sign in in fullstack mode. Passwords use scrypt; short-lived access JWTs are kept in browser memory. Rotating refresh tokens are hashed in PostgreSQL and sent only as HttpOnly cookies. Server checks ownership for drafts and comments.
+- Create a draft, edit it with a version check, and publish it. The first editor stores plain text safely; rich text is on the roadmap.
+- Run the same reader and writing flow as an **explicit browser-only demo** on GitHub Pages. Demo writes remain on the current device and are not accounts or server data.
+- Export compatible `crossroad.posts.v2` records as JSON and raw demo data as text without deleting or uploading either key.
 
-```text
-CrossRoad/
-  .github/workflows/deploy-pages.yml
-  docs/
-  public/
-  src/
-  index.html
-  package.json
-  tsconfig.json
-  vite.config.ts
-  README.md
-```
+The larger product brief includes follows, communities, recommendations, moderation, notifications, rich text, profiles, and analytics. Those are **not implemented yet**; see the [prioritized roadmap](docs/product/ROADMAP.md).
 
-## Быстрый старт
+## Stack and layout
 
-```bash
-npm install
-npm run dev
-```
+| Area     | Current implementation                                                      |
+| -------- | --------------------------------------------------------------------------- |
+| Web      | React 18, TypeScript, Vite, React Router, TanStack Query, local font assets |
+| API      | NestJS 11, REST, Zod validation, Swagger, Pino request logs                 |
+| Data     | PostgreSQL, Prisma 6 migrations, full text index                            |
+| Tests    | Vitest, isolated PostgreSQL integration runner, Playwright demo flow        |
+| Delivery | pnpm workspace, Docker Compose files, GitHub Actions demo deployment        |
 
-## Сборка
+`apps/web` contains routes and both repository adapters; `apps/api` owns persistence and authorization; `packages/contracts` holds shared validation and response types. [Architecture](docs/architecture/OVERVIEW.md) explains the boundaries.
+
+## Quick start: demo
+
+Requires Node.js 22.12+ and pnpm 10.34.4.
 
 ```bash
-npm run build
-npm run preview
+pnpm install --frozen-lockfile
+pnpm build:demo
+pnpm --filter @crossroad/web preview
 ```
 
-## Деплой на GitHub Pages
+Open <http://localhost:4173>. During development, `pnpm dev` serves the demo at <http://localhost:5173> by default. The browser stores demo records under `crossroad.demo.v3`.
 
-Workflow деплоя: [./.github/workflows/deploy-pages.yml](./.github/workflows/deploy-pages.yml)
+## Fullstack mode
 
-Подробные шаги: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
+1. Create `.env` from `.env.example`; set a random `SESSION_SECRET` of at least 32 bytes and a unique database password. Never commit `.env`.
+2. Start PostgreSQL 16 and set `DATABASE_URL` for that instance.
+3. Run:
 
-## Документация
+```bash
+pnpm install --frozen-lockfile
+pnpm db:generate
+pnpm db:migrate
+pnpm build
+pnpm dev:api
+```
 
-- [Архитектура прототипа](docs/ARCHITECTURE.md)
-- [Деплой](docs/DEPLOYMENT.md)
-- [Дорожная карта](docs/ROADMAP.md)
-- [Индекс документации](docs/README.md)
+In another terminal, run `pnpm dev:api-web`. The root `.env` supplies the API URL and mode. The API is at <http://localhost:3000>; API docs are at `/docs`.
 
-## Лицензии
+`docker compose up --build` is also configured for a local fullstack stack at <http://localhost:8080> after `.env` is set. Docker was unavailable in the audit environment, so this Compose path still needs an external smoke test. See [deployment notes](docs/engineering/DEPLOYMENT.md).
 
-- Код: [MIT](LICENSE)
-- Контент: [CC-BY-NC-SA-4.0](CC-BY-NC-SA-4.0)
+## Verification
+
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm test:integration
+pnpm test:e2e
+pnpm test:fullstack
+pnpm build
+pnpm check:budget
+```
+
+The integration command starts an isolated PostgreSQL instance, applies the migration, starts the compiled API, and exercises the main flow. The E2E command checks the static demo in Chromium. `test:fullstack` runs the API and browser together against isolated PostgreSQL. See [testing](docs/engineering/TESTING.md).
+
+## Documentation and contribution
+
+- [Audit and baseline](docs/engineering/AUDIT.md)
+- [Development](docs/engineering/DEVELOPMENT.md)
+- [Architecture decisions](docs/architecture/DECISIONS.md)
+- [API reference](docs/api/README.md)
+- [Roadmap](docs/product/ROADMAP.md)
+- [Contributing](CONTRIBUTING.md), [security](SECURITY.md), [code of conduct](CODE_OF_CONDUCT.md)
+
+Code retains its [MIT license](LICENSE). Existing sample content retains [CC-BY-NC-SA-4.0](CC-BY-NC-SA-4.0).

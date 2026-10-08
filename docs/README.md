@@ -1,7 +1,7 @@
-# CrossRoad Docs
+# CrossRoad documentation
 
-Документация проекта:
-
-- [ARCHITECTURE.md](ARCHITECTURE.md) - архитектура и принципы текущего прототипа
-- [DEPLOYMENT.md](DEPLOYMENT.md) - деплой на GitHub Pages
-- [ROADMAP.md](ROADMAP.md) - направления развития проекта
+- [Audit](engineering/AUDIT.md)
+- [Architecture overview](architecture/OVERVIEW.md) and [decisions](architecture/DECISIONS.md)
+- [API](api/README.md)
+- [Development](engineering/DEVELOPMENT.md), [testing](engineering/TESTING.md), [deployment](engineering/DEPLOYMENT.md)
+- [Roadmap](product/ROADMAP.md)
