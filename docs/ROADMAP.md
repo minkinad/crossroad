@@ -1,29 +1,3 @@
 # Roadmap
 
-## Этап 1 (сделано)
-
-- Рабочий фронтенд-прототип
-- Современный UI
-- Поддержка локальных данных
-- Автодеплой на GitHub Pages
-
-## Этап 2 (следующий)
-
-- API-контракт и backend-адаптер
-- Авторизация (JWT + refresh)
-- Профиль пользователя
-- Система тегов и сортировок
-
-## Этап 3
-
-- Модерация контента
-- Нотификации
-- Вложения и медиа
-- Метрики активности и аналитика
-
-## Этап 4
-
-- Docker-сборка backend
-- staging/prod окружения
-- тесты (unit/integration/e2e)
-- observability (logs + traces)
+Current prioritized roadmap: [docs/product/ROADMAP.md](product/ROADMAP.md).
