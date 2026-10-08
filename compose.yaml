@@ -1,0 +1,43 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: crossroad
+      POSTGRES_USER: crossroad
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - crossroad_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U crossroad -d crossroad"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/api.Dockerfile
+    environment:
+      DATABASE_URL: postgresql://crossroad:${POSTGRES_PASSWORD}@db:5432/crossroad?schema=public
+      SESSION_SECRET: ${SESSION_SECRET:?Set SESSION_SECRET in .env}
+      WEB_ORIGIN: http://localhost:8080
+      PORT: 3000
+      NODE_ENV: development
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+  web:
+    build:
+      context: .
+      dockerfile: infra/docker/web.Dockerfile
+      args:
+        VITE_DATA_MODE: api
+        VITE_API_URL: http://localhost:3000
+    ports:
+      - "8080:8080"
+    depends_on:
+      api:
+        condition: service_healthy
+volumes:
+  crossroad_pg:
