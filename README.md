@@ -1,10 +1,16 @@
-# CrossRoad
+# CrossRoad [![Validate](https://github.com/minkinad/crossroad/actions/workflows/validate.yml/badge.svg?branch=main)](https://github.com/minkinad/crossroad/actions/workflows/validate.yml)
 
-**Write. Discover. Discuss. Connect.** CrossRoad is an open-source space for publishing articles and discussing ideas. This repository now contains a working first fullstack slice and a separate static demo. It is an active rebuild, not a complete community platform.
+**Write. Discover. Discuss. Connect.** CrossRoad is an open-source space for publishing articles and discussing ideas. The repository contains a working fullstack slice and a separate static demo. It is an active rebuild, not a complete community platform.
 
 ![CrossRoad desktop demo](docs/images/home.png)
 
 [Mobile screenshot](docs/images/mobile.png)
+
+## Interface
+
+The editorial UI uses a cobalt and coral palette, large reading typography, and responsive layouts for desktop and mobile. Readers can search articles and filter by popular topics directly above the feed. The interface includes light and dark themes; the selected theme is saved in the browser.
+
+Article pages keep the reading column focused and place discussion below the story. The writing screen shows field guidance and character counts. Keyboard users have a skip link and visible focus states, and motion is reduced when requested by the operating system. The demo browser tests cover a 320 px viewport and theme persistence; they do not constitute a full accessibility audit.
 
 ## What works now
 
@@ -62,6 +68,7 @@ In another terminal, run `pnpm dev:api-web`. The root `.env` supplies the API UR
 
 ```bash
 pnpm lint
+pnpm format:check
 pnpm typecheck
 pnpm test
 pnpm test:integration
@@ -71,7 +78,7 @@ pnpm build
 pnpm check:budget
 ```
 
-The integration command starts an isolated PostgreSQL instance, applies the migration, starts the compiled API, and exercises the main flow. The E2E command checks the static demo in Chromium. `test:fullstack` runs the API and browser together against isolated PostgreSQL. See [testing](docs/engineering/TESTING.md).
+The `typecheck` command builds shared contracts before checking the API and web packages, so it works after a clean checkout. The integration command starts an isolated PostgreSQL instance, applies the migration, starts the compiled API, and exercises the main flow. The E2E command checks the static demo in Chromium. `test:fullstack` runs the API and browser together against isolated PostgreSQL. See [testing](docs/engineering/TESTING.md).
 
 ## Documentation and contribution
 
