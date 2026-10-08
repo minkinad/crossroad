@@ -1,31 +1,3 @@
-# Архитектура CrossRoad (прототип)
+# Architecture
 
-## Цель
-
-Дать рабочий учебный MVP, который:
-
-- легко запускается локально
-- быстро деплоится на GitHub Pages
-- не зависит от серверной части на этапе демонстрации
-
-## Слои приложения
-
-- `src/types.ts` - доменные типы (`PostItem`, `CommentItem`)
-- `src/data/seed.ts` - стартовый набор данных
-- `src/lib/storage.ts` - хранение состояния в `localStorage`
-- `src/App.tsx` - UI и пользовательские сценарии
-- `src/styles.css` - дизайн-токены, адаптив, анимации
-
-## Выбранные решения
-
-- `Vite` для быстрой сборки и простого CI/CD
-- `React + TypeScript` для масштабируемости
-- Локальное хранение данных для независимого demo-режима
-- Автоконфигурация `base` в `vite.config.ts` под GitHub Pages
-
-## Направления расширения
-
-1. Вынести API-слой в отдельный модуль (`src/api/*`).
-2. Заменить `localStorage` на backend REST/GraphQL.
-3. Добавить auth, роли и модерацию.
-4. Внедрить e2e и интеграционные тесты.
+Current architecture: [docs/architecture/OVERVIEW.md](architecture/OVERVIEW.md). The former one-screen frontend description is superseded by the workspace architecture.
