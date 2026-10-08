@@ -24,6 +24,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build:demo
+        env:
+          CROSSROAD_PAGES_BUILD: "true"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: apps/web/dist
